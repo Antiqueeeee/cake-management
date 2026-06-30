@@ -1,0 +1,52 @@
+/**
+ * Element Plus 主题定制
+ *
+ * 本文件只做 @forward 变量覆盖，不直接 @use 'index.scss'——否则与 vite.config
+ * 中的 additionalData 注入形成循环引用（每份被组件按需引入的 SCSS 都会通过
+ * additionalData 再次进入本文件）。
+ *
+ * 工作机制：
+ * 1. unplugin-vue-components 用 importStyle: 'sass' 给每个 EP 组件自动注入
+ *    它自己的 style/scss/xxx.scss 路径
+ * 2. vite.config 的 additionalData 给所有 .scss 头部注入 @use 本文件
+ * 3. 本文件 @forward 重写 var.scss 中的变量 → 所有 EP 组件 SCSS 编译时拿到新变量
+ *
+ * 文档：https://element-plus.org/en/guide/theming.html
+ */
+
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+    'primary': (
+      'base': #EA580C,
+    ),
+    'success': (
+      'base': #16A34A,
+    ),
+    'warning': (
+      'base': #F59E0B,
+    ),
+    'danger': (
+      'base': #DC2626,
+    ),
+    'info': (
+      'base': #6B7280,
+    ),
+  ),
+  $border-radius: (
+    'base': 12px,
+    'small': 8px,
+    'round': 9999px,
+  ),
+  $font-size: (
+    'extra-large': 24px,
+    'large': 20px,
+    'medium': 18px,
+    'base': 18px,
+    'small': 16px,
+    'extra-small': 14px,
+  ),
+  $button: (
+    'font-weight': 500,
+  )
+);
+

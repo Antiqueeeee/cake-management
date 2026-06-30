@@ -1,0 +1,132 @@
+/**
+ * 后厨屏设计 token
+ * 单一可信源：frontend/design-system/MASTER.md
+ * 不在组件内写裸 hex，一律 var(--xxx)
+ */
+
+:root {
+  /* ============ 品牌主色（暖烘焙）============ */
+  --brand-50: #FFF7ED;
+  --brand-100: #FFEDD5;
+  --brand-200: #FED7AA;
+  --brand-300: #FDBA74;
+  --brand-400: #FB923C;
+  --brand-500: #F97316;
+  --brand-600: #EA580C;
+  --brand-700: #C2410C;
+  --brand-800: #9A3412;
+  --brand-900: #7C2D12;
+
+  /* ============ 状态色（五列编码）============ */
+  --status-pending: #F59E0B;
+  --status-pending-bg: #FEF3C7;
+  --status-pending-fg: #78350F;
+  --status-pending-border: #FCD34D;
+
+  --status-cooking: #EA580C;
+  --status-cooking-bg: #FFEDD5;
+  --status-cooking-fg: #7C2D12;
+  --status-cooking-border: #FDBA74;
+
+  --status-ready-pickup: #16A34A;
+  --status-ready-pickup-bg: #DCFCE7;
+  --status-ready-pickup-fg: #14532D;
+  --status-ready-pickup-border: #86EFAC;
+
+  --status-ready-delivery: #0891B2;
+  --status-ready-delivery-bg: #CFFAFE;
+  --status-ready-delivery-fg: #164E63;
+  --status-ready-delivery-border: #67E8F9;
+
+  --status-delivering: #2563EB;
+  --status-delivering-bg: #DBEAFE;
+  --status-delivering-fg: #1E3A8A;
+  --status-delivering-border: #93C5FD;
+
+  /* ============ 功能色 ============ */
+  --bg-page: #FFFBEB;
+  --bg-card: #FFFFFF;
+  --bg-elevated: #FFFFFF;
+  --bg-muted: #FEF3C7;
+  --bg-overlay: rgba(28, 25, 23, 0.55);
+
+  --fg-primary: #1C1917;
+  --fg-secondary: #57534E;
+  --fg-tertiary: #78716C;
+  --fg-disabled: #A8A29E;
+  --fg-on-brand: #FFFFFF;
+
+  --border: #E7E5E4;
+  --border-strong: #D6D3D1;
+  --border-soft: #F5F5F4;
+
+  --danger: #DC2626;
+  --danger-bg: #FEE2E2;
+  --danger-fg: #7F1D1D;
+  --danger-border: #FCA5A5;
+
+  --success: #16A34A;
+  --warning: #F59E0B;
+  --info: #2563EB;
+
+  /* ============ 字体 ============ */
+  --font-sans: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', 'SF Mono', Consolas, monospace;
+
+  /* ============ 字号（后厨屏特调，比常规大一档）============ */
+  --text-xs: 14px;
+  --text-sm: 16px;
+  --text-base: 18px;
+  --text-lg: 20px;
+  --text-xl: 24px;
+  --text-2xl: 32px;
+  --text-3xl: 48px;
+
+  /* ============ 间距（8dp 系统）============ */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* ============ 圆角 ============ */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 9999px;
+
+  /* ============ 阴影 ============ */
+  --shadow-card: 0 1px 2px rgba(124, 45, 18, 0.04), 0 2px 8px rgba(124, 45, 18, 0.06);
+  --shadow-card-hover: 0 4px 12px rgba(124, 45, 18, 0.1), 0 8px 24px rgba(124, 45, 18, 0.08);
+  --shadow-glow-pending: 0 0 0 4px rgba(245, 158, 11, 0.35), 0 0 24px rgba(245, 158, 11, 0.55);
+  --shadow-modal: 0 24px 48px -12px rgba(124, 45, 18, 0.25), 0 8px 16px -4px rgba(124, 45, 18, 0.1);
+  --shadow-status-bar: inset 0 -2px 0 rgba(0, 0, 0, 0.04);
+
+  /* ============ 动效 ============ */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+  --dur-slow: 400ms;
+
+  /* ============ z-index 层级 ============ */
+  --z-base: 0;
+  --z-card: 10;
+  --z-header: 100;
+  --z-banner: 200;
+  --z-dropdown: 1000;
+  --z-modal: 2000;
+  --z-toast: 3000;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 0ms;
+  }
+}

@@ -1,0 +1,122 @@
+/**
+ * 全局样式重置 + 基础排版
+ */
+
+@use './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--fg-primary);
+  background: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* 后厨屏：禁用文本选择（油污手指长按误触发）*/
+  -webkit-user-select: none;
+  user-select: none;
+  /* 禁用 iOS 点击高亮 */
+  -webkit-tap-highlight-color: transparent;
+  /* 触控：移除 300ms 延迟 */
+  touch-action: manipulation;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input,
+textarea {
+  font-family: inherit;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* 数字等宽，防止订单号/时间跳动 */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
+  font-feature-settings: 'tnum';
+}
+
+/* 焦点环：键盘可见、触屏不刺眼 */
+:focus-visible {
+  outline: 3px solid var(--brand-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--fg-tertiary);
+}
+
+/* 动画工具类 */
+@keyframes pulse-new-order {
+  0%,
+  100% {
+    box-shadow: var(--shadow-card);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: var(--shadow-glow-pending);
+    transform: scale(1.015);
+  }
+}
+
+@keyframes shake-error {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-8px);
+  }
+  40%,
+  80% {
+    transform: translateX(8px);
+  }
+}
+
+@keyframes slide-in-from-top {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

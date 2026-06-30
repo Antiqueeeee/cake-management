@@ -17,7 +17,8 @@ import {
   Loader2,
 } from 'lucide-vue-next'
 import type { Order } from '@/shared/types/models'
-import { PaymentMethod, PAYMENT_METHOD_LABEL } from '@/shared/constants/orderStatus'
+import { PaymentMethod, PaymentStatus, PAYMENT_METHOD_LABEL } from '@/shared/constants/orderStatus'
+import { getHighestNoteLevel } from '@/shared/constants/noteKeywords'
 import { ApiException } from '@/shared/types/api'
 import { useKitchenStore } from '../store'
 import { formatPrice } from '@/shared/utils/format'
@@ -32,7 +33,10 @@ const kitchen = useKitchenStore()
 const selectedPayment = ref<PaymentMethod>(PaymentMethod.CASH)
 const submitting = ref(false)
 
-const isUnpaid = computed(() => props.order?.payment_status === 'UNPAID')
+const isUnpaid = computed(() => props.order?.payment_status === PaymentStatus.UNPAID)
+const notesAllergy = computed(
+  () => props.order && getHighestNoteLevel(props.order.customer_notes) === 'allergy',
+)
 
 watch(
   () => props.modelValue,
@@ -101,7 +105,7 @@ function close() {
 
       <!-- 备注提醒 -->
       <div v-if="order?.customer_notes.length" class="notes-block">
-        <AlertTriangle v-if="/过敏|忌口/.test(order.customer_notes.map(n => n.content).join(''))" :size="14" />
+        <AlertTriangle v-if="notesAllergy" :size="14" />
         <span>{{ order.customer_notes.map(n => n.content).join('；') }}</span>
       </div>
 

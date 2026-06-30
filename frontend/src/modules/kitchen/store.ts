@@ -49,6 +49,8 @@ export const useKitchenStore = defineStore('kitchen', () => {
   const recentNewOrderIds = ref<Set<number>>(new Set())
 
   let unsubscribe: (() => void) | null = null
+  /** 高亮计时器集合：stopNewOrderWatch 时一并清，避免登出/重登累积泄漏 */
+  const highlightTimers = new Set<ReturnType<typeof setTimeout>>()
 
   async function fetchTodayOrders() {
     loading.value = true
@@ -68,11 +70,13 @@ export const useKitchenStore = defineStore('kitchen', () => {
       orders.value.unshift(order)
       recentNewOrderIds.value.add(order.id)
       // 30 秒后从「新单」集合中移除（高亮停止，但订单仍在）
-      setTimeout(() => {
+      const t = setTimeout(() => {
         recentNewOrderIds.value.delete(order.id)
         // 触发响应式更新
         recentNewOrderIds.value = new Set(recentNewOrderIds.value)
+        highlightTimers.delete(t)
       }, 30_000)
+      highlightTimers.add(t)
       recentNewOrderIds.value = new Set(recentNewOrderIds.value)
     })
   }
@@ -82,6 +86,9 @@ export const useKitchenStore = defineStore('kitchen', () => {
       unsubscribe()
       unsubscribe = null
     }
+    for (const t of highlightTimers) clearTimeout(t)
+    highlightTimers.clear()
+    recentNewOrderIds.value = new Set()
   }
 
   function isNewOrder(orderId: number): boolean {

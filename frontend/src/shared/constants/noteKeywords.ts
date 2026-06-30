@@ -20,7 +20,7 @@ export const ALLERGY_KEYWORDS: readonly string[] = [
   '宝宝',
   '婴儿',
   '小孩',
-  ' gluten',
+  '麸质',
 ] as const
 
 /** 加急类：卡片角标黄色提醒 */

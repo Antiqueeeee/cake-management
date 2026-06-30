@@ -38,8 +38,8 @@ function close() {
   emit('update:modelValue', false)
 }
 
-function onWakeLockChange(v: boolean) {
-  settings.wakeLockEnabled = v
+function onWakeLockChange(v: string | number | boolean) {
+  settings.wakeLockEnabled = Boolean(v)
   if (v) {
     wakeLock.request()
   } else {
@@ -314,7 +314,7 @@ function dismissPreview() {
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
-  background: linear-gradient(90deg, var(--danger), #b91c1c);
+  background: linear-gradient(90deg, var(--danger), var(--danger-dark));
   color: white;
   z-index: var(--z-banner);
 }

@@ -6,41 +6,18 @@
  * - 固定顶部红色横幅，提示后厨人工留意微信群接单消息
  * - 设置面板可关闭（不建议）
  * - 实际场景下由 useWebSocket 控制显示，原型期默认隐藏
+ *
+ * 注：设置面板内的横幅预览（SettingsDrawer.vue）是 drawer 内的小尺寸独立实例，
+ * 与本组件定位不同（屏幕顶部全宽 vs drawer 内紧凑展示），分别维护合理。
  */
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref } from 'vue'
 import { WifiOff, X } from 'lucide-vue-next'
 import { useKitchenSettings } from '../composables/useKitchenSettings'
 
 const settings = useKitchenSettings()
 
-// 原型期：5 秒后短暂模拟一次断网横幅以演示效果
-// 真实场景由 useWebSocket 控制
+// 原型期：visible 由未来的 useWebSocket 接入后控制；当前默认隐藏
 const visible = ref(false)
-let demoTimer: ReturnType<typeof setTimeout> | null = null
-
-onMounted(() => {
-  if (!settings.offlineBannerEnabled) return
-  // 不演示，让用户在设置面板手动触发开关时看到效果
-})
-
-onUnmounted(() => {
-  if (demoTimer) clearTimeout(demoTimer)
-})
-
-/** 外部可调用：手动触发横幅显示（用于演示与设置面板测试） */
-defineExpose({
-  showDemo() {
-    if (!settings.offlineBannerEnabled) return
-    visible.value = true
-    if (demoTimer) clearTimeout(demoTimer)
-    demoTimer = setTimeout(() => {
-      visible.value = false
-    }, 8000)
-  },
-  hide() {
-    visible.value = false
-  },
-})
 
 function dismiss() {
   visible.value = false
@@ -68,7 +45,7 @@ function dismiss() {
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-5);
-  background: linear-gradient(90deg, var(--danger), #B91C1C);
+  background: linear-gradient(90deg, var(--danger), var(--danger-dark));
   color: white;
   font-size: var(--text-base);
   position: relative;

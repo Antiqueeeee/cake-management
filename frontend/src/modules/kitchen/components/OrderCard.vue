@@ -16,9 +16,14 @@
 import { computed } from 'vue'
 import { MapPin, Clock, AlertTriangle, StickyNote, ChevronRight } from 'lucide-vue-next'
 import type { Order } from '@/shared/types/models'
-import { STATUS_META, PAYMENT_METHOD_LABEL } from '@/shared/constants/orderStatus'
-import { getAvailableActions, type AvailableAction } from '@/shared/constants/orderAction'
-import { getHighestNoteLevel } from '@/shared/constants/noteKeywords'
+import {
+  STATUS_META,
+  PAYMENT_METHOD_LABEL,
+  PaymentStatus,
+  PickupMethod,
+} from '@/shared/constants/orderStatus'
+import { getAvailableActions, OrderAction, type AvailableAction } from '@/shared/constants/orderAction'
+import { getNoteHighlight, getHighestNoteLevel } from '@/shared/constants/noteKeywords'
 import { formatPickupTime, isUrgent } from '@/shared/utils/format'
 
 const props = defineProps<{
@@ -36,7 +41,7 @@ const noteLevel = computed(() => getHighestNoteLevel(props.order.customer_notes)
 
 const hasAllergyInOrderNote = computed(() => {
   if (!props.order.order_note) return false
-  return /过敏|忌口|不能吃|不吃/.test(props.order.order_note)
+  return getNoteHighlight(props.order.order_note) === 'allergy'
 })
 
 const urgent = computed(() => isUrgent(props.order.pickup_at, props.order.status))
@@ -51,14 +56,14 @@ const primaryAction = computed<AvailableAction | null>(() => {
   if (list.length === 0) return null
   const action = list[0]
   // 客户到店取货：根据支付状态切换按钮标签
-  if (action.action === 'CLOSE_PICKUP') {
-    if (props.order.payment_status === 'UNPAID') {
+  if (action.action === OrderAction.CLOSE_PICKUP) {
+    if (props.order.payment_status === PaymentStatus.UNPAID) {
       return { ...action, label: '收款并交付' }
     }
     return { ...action, label: '确认交付' }
   }
-  if (action.action === 'CLOSE_DELIVERY') {
-    if (props.order.payment_status === 'UNPAID') {
+  if (action.action === OrderAction.CLOSE_DELIVERY) {
+    if (props.order.payment_status === PaymentStatus.UNPAID) {
       return { ...action, label: '送达并收款' }
     }
     return { ...action, label: '确认送达' }
@@ -116,7 +121,7 @@ function onProductClick() {
     <!-- 取货方式 / 配送地址 -->
     <div class="pickup-row">
       <MapPin :size="14" />
-      <template v-if="order.pickup_method === 'PICKUP'">
+      <template v-if="order.pickup_method === PickupMethod.PICKUP">
         <span class="pickup-method-tag pickup">自取</span>
       </template>
       <template v-else>
@@ -126,7 +131,7 @@ function onProductClick() {
     </div>
 
     <!-- 支付状态条（仅 PAID 显示，UNPAID 不强调）-->
-    <div v-if="order.payment_status === 'PAID'" class="paid-tag">
+    <div v-if="order.payment_status === PaymentStatus.PAID" class="paid-tag">
       已付 · {{ PAYMENT_METHOD_LABEL[order.payment_method!] }}
     </div>
 
@@ -147,10 +152,10 @@ function onProductClick() {
       :key="cn.id"
       class="customer-note-row"
       :class="{
-        allergy: /过敏|忌口|不能吃|不吃/.test(cn.content),
+        allergy: getNoteHighlight(cn.content) === 'allergy',
       }"
     >
-      <AlertTriangle v-if="/过敏|忌口|不能吃|不吃/.test(cn.content)" :size="13" />
+      <AlertTriangle v-if="getNoteHighlight(cn.content) === 'allergy'" :size="13" />
       <span>{{ cn.content }}</span>
     </div>
 

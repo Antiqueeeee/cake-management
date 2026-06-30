@@ -31,6 +31,7 @@ const submitting = ref(false)
 const lockedUntil = ref<Date | null>(null)
 const lockTick = ref(0)
 let lockTimer: ReturnType<typeof setInterval> | null = null
+let shakeTimer: ReturnType<typeof setTimeout> | null = null
 
 onMounted(() => {
   nextTick(() => inputRefs.value[0]?.focus())
@@ -38,6 +39,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   if (lockTimer) clearInterval(lockTimer)
+  if (shakeTimer) clearTimeout(shakeTimer)
 })
 
 function currentFilled(): number {
@@ -98,7 +100,8 @@ function onPaste(e: ClipboardEvent) {
 
 function shakeAndClear() {
   shaking.value = true
-  setTimeout(() => (shaking.value = false), 400)
+  if (shakeTimer) clearTimeout(shakeTimer)
+  shakeTimer = setTimeout(() => (shaking.value = false), 400)
   digits.value = Array(PIN_LENGTH).fill('')
   focusAt(0)
 }

@@ -7,6 +7,11 @@
  */
 import { onMounted, onUnmounted } from 'vue'
 
+/**
+ * 模块级 sentinel：全局只有一份 wake lock。
+ * App.vue（启动时常亮申请）和 SettingsDrawer（用户切换开关）共享同一引用，
+ * 这是预期行为——用户视角「常亮」是一个全局开关，不应按组件分别持有。
+ */
 let sentinel: WakeLockSentinel | null = null
 
 async function requestInternal() {

@@ -19,6 +19,9 @@ import {
 } from 'lucide-vue-next'
 import { useAuthStore, useKitchenStore } from '../store'
 import { useKitchenSettings } from '../composables/useKitchenSettings'
+import { useWakeLock } from '../composables/useWakeLock'
+import { stopAutoNewOrder } from '../service'
+import { OrderStatus } from '@/shared/constants/orderStatus'
 import { formatClock, formatDate } from '@/shared/utils/format'
 import { useEventBus } from './eventBus'
 
@@ -26,6 +29,7 @@ const auth = useAuthStore()
 const kitchen = useKitchenStore()
 const router = useRouter()
 const settings = useKitchenSettings()
+const wakeLock = useWakeLock()
 const bus = useEventBus()
 
 const now = ref(new Date())
@@ -38,12 +42,14 @@ onUnmounted(() => {
 })
 
 const pendingCount = computed(() =>
-  kitchen.orders.filter((o) => o.status === 'PENDING').length,
+  kitchen.orders.filter((o) => o.status === OrderStatus.PENDING).length,
 )
 
 async function onLogout() {
   await auth.logout()
   kitchen.stopNewOrderWatch()
+  stopAutoNewOrder()
+  wakeLock.release()
   router.replace('/kitchen/login')
 }
 

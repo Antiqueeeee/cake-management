@@ -29,7 +29,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/:pathMatch(.*)*',
-    redirect: '/kitchen/board',
+    redirect: '/kitchen/login',
   },
 ]
 

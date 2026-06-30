@@ -103,7 +103,6 @@
   /* ============ 阴影 ============ */
   --shadow-card: 0 1px 2px rgba(124, 45, 18, 0.04), 0 2px 8px rgba(124, 45, 18, 0.06);
   --shadow-card-hover: 0 4px 12px rgba(124, 45, 18, 0.1), 0 8px 24px rgba(124, 45, 18, 0.08);
-  --shadow-brand-glow: 0 6px 14px rgba(234, 88, 12, 0.25);
   --shadow-glow-pending: 0 0 0 4px rgba(245, 158, 11, 0.35), 0 0 24px rgba(245, 158, 11, 0.55);
   --shadow-modal: 0 24px 48px -12px rgba(124, 45, 18, 0.25), 0 8px 16px -4px rgba(124, 45, 18, 0.1);
   --shadow-status-bar: inset 0 -2px 0 rgba(0, 0, 0, 0.04);

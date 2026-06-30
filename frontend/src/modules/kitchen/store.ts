@@ -11,6 +11,7 @@ import { ApiException } from '@/shared/types/api'
 import { OrderAction } from '@/shared/constants/orderAction'
 import { PaymentMethod } from '@/shared/constants/orderStatus'
 import { kitchenService as service, subscribeNewOrder } from './service'
+import { useKitchenSettings } from './composables/useKitchenSettings'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)
@@ -43,9 +44,10 @@ export const useAuthStore = defineStore('auth', () => {
 })
 
 export const useKitchenStore = defineStore('kitchen', () => {
+  const settings = useKitchenSettings()
   const orders = ref<Order[]>([])
   const loading = ref(false)
-  /** 新到的订单 id 集合：用于卡片高亮 30 秒 */
+  /** 新到的订单 id 集合：用于卡片高亮（持续时间由 settings.highlightSeconds 控制） */
   const recentNewOrderIds = ref<Set<number>>(new Set())
 
   let unsubscribe: (() => void) | null = null
@@ -69,13 +71,13 @@ export const useKitchenStore = defineStore('kitchen', () => {
       if (orders.value.some((o) => o.id === order.id)) return
       orders.value.unshift(order)
       recentNewOrderIds.value.add(order.id)
-      // 30 秒后从「新单」集合中移除（高亮停止，但订单仍在）
+      // 高亮持续时间由用户设置控制（默认 30s，可调 10-120s）
       const t = setTimeout(() => {
         recentNewOrderIds.value.delete(order.id)
         // 触发响应式更新
         recentNewOrderIds.value = new Set(recentNewOrderIds.value)
         highlightTimers.delete(t)
-      }, 30_000)
+      }, settings.highlightSeconds * 1000)
       highlightTimers.add(t)
       recentNewOrderIds.value = new Set(recentNewOrderIds.value)
     })
